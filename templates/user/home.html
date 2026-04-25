@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block menusidebar %}
+{% include "user/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<!--begin::App Content Header-->
+<div class="app-content-header">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <!--begin::Row-->
+        <div class="row">
+            <div class="col-sm-6">
+                <h3 class="mb-0">Dashboard v3</h3>
+            </div>
+            <!-- <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Dashboard v3</li>
+                </ol>
+            </div> -->
+        </div>
+        <!--end::Row-->
+    </div>
+    <!--end::Container-->
+</div>
+<div class="app-content">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <!--begin::Row-->
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card card-secondary">
+                    <div class="card-header">
+                        <h3 class="card-title">F1A121001 - JOHN DOE</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse" title="Collapse">
+                                <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                                <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        Judul : Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.
+                        <hr>
+                        <i class="bi bi-geo-alt"></i> Ruang Seminar | <i class="bi bi-calendar"></i> Kamis 20 Juli 2023,
+                        10.00 WIB
+                        <hr>
+                        <ul class="list-group">
+                            <li class="list-group-item">Ketua : Dr. A</li>
+                            <li class="list-group-item">Sekretaris : Dr. B</li>
+                            <li class="list-group-item">Anggota : Dr. C</li>
+                            <li class="list-group-item">Pembimbing 1 : Dr. F</li>
+                            <li class="list-group-item">Pembimbing 2 : Dr. G</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer text-end">
+                        <a href="/dosen/penilaian" class="btn btn-primary">Input Nilai</a>
+                        <!-- <button type="submit" class="btn btn-primary">Input Nilai</button> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-secondary">
+                    <div class="card-header">
+                        <h3 class="card-title">F1A121001 - JOHN DOE</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse" title="Collapse">
+                                <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                                <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        Judul : Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.
+                        <hr>
+                        Ruang Seminar, Kamis 20 Juli 2023, 10.00 WIB
+                        <hr>
+                        <ul class="list-group">
+                            <li class="list-group-item">Ketua : Dr. A</li>
+                            <li class="list-group-item">Sekretaris : Dr. B</li>
+                            <li class="list-group-item">Anggota : Dr. C</li>
+                            <li class="list-group-item">Pembimbing 1 : Dr. F</li>
+                            <li class="list-group-item">Pembimbing 2 : Dr. G</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">F1A121001 - JOHN DOE</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse" title="Collapse">
+                                <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                                <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        Judul : Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.
+                        <hr>
+                        Ruang Seminar, Kamis 20 Juli 2023, 10.00 WIB
+                        <hr>
+                        <ul class="list-group">
+                            <li class="list-group-item">Ketua : Dr. A</li>
+                            <li class="list-group-item">Sekretaris : Dr. B</li>
+                            <li class="list-group-item">Anggota : Dr. C</li>
+                            <li class="list-group-item">Pembimbing 1 : Dr. F</li>
+                            <li class="list-group-item">Pembimbing 2 : Dr. G</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end::Row-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::App Content-->
+{% endblock %}

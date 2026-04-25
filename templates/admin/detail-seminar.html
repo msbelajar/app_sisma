@@ -1,0 +1,318 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+<link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}
+
+{% block menusidebar %}
+{% include "admin/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<!--begin::App Content Header-->
+<div class="app-content-header">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <!--begin::Row-->
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-between">
+                <h4 class="mb-2">Data Seminar</h4>
+            </div>
+        </div>
+    </div>
+    <!--end::Container-->
+</div>
+<div class="app-content">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <!--begin::Row-->
+        <div class="row">
+            <div class="col-12">
+                {% if seminar.jenis_seminar == 1 %}
+                <div class="card card-secondary">
+                    {% else %}
+                    <div class="card card-warning">
+                        {% endif %}
+                        <div class="card-header">
+                            <h3 class="card-title">{{ seminar.nim }} - {{ seminar.mahasiswa.nama_mahasiswa }}</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"
+                                    title="Collapse">
+                                    <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                                    <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <form id="ubahseminar">
+                            <div class="card-body">
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <div class="mb-3">
+                                                <label for="nim" class="form-label">NIM</label>
+                                                <input type="text" class="form-control" id="nim" name="nim"
+                                                    value="{{ seminar.nim }}" pattern="^F1A1\d{5}$" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label for="nama" class="form-label">Nama</label>
+                                                <input type="text" class="form-control" id="nama" name="nama"
+                                                    value="{{ seminar.mahasiswa.nama_mahasiswa }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <label for="seminar" class="form-label">Seminar</label>
+                                            <select class="form-select" id="seminar" name="seminar">
+                                                <option value="1" {% if seminar.jenis_seminar==1 %}selected{% endif %}>
+                                                    Proposal</option>
+                                                <option value="2" {% if seminar.jenis_seminar==2 %}selected{% endif %}>
+                                                    Akhir</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+
+                                        <label for="judul" class="form-label">Judul</label>
+                                        <textarea class="form-control" id="judul" name="judul" rows="3"
+                                            required>{{ seminar.judul_skripsi }}</textarea>
+                                    </div>
+                                    <div class="row">
+                                        <div class="mb-3 col-4">
+                                            <label for="ruang" class="form-label">Ruang</label>
+                                            <input type="text" class="form-control" id="ruang" name="ruang"
+                                                value="{{ seminar.ruangan }}" required>
+                                        </div>
+                                        <div class="mb-3 col-4">
+                                            <label for="tanggal" class="form-label">Tanggal</label>
+                                            <input type="date" class="form-control" id="tanggal" name="tanggal" required
+                                                value="{{ seminar.waktu_seminar.strftime('%Y-%m-%d') }}">
+                                        </div>
+                                        <div class="col-4">
+                                            <label for="waktu" class="form-label">Waktu</label>
+                                            <input type="time" class="form-control" id="waktu" name="waktu" required
+                                                value="{{ seminar.waktu_seminar.strftime('%H:%M') }}">
+                                        </div>
+                                    </div>
+                                    <div class="row g-2">
+                                        <div class="col-6">
+                                            <div class="row g-2 align-items-center">
+                                                <div class="col-3">
+                                                    <label for="ketua" class="form-label">Ketua</label>
+                                                </div>
+                                                <div class="col-9">
+                                                    <select class="form-select listdosen" id="ketua" name="ketua"
+                                                        required>
+                                                        {% for dosen in dosen %}
+                                                        <option value="{{ dosen.id }}" {% for ds in seminar.dosen_roles
+                                                            %} {% if ds.peran==1 and ds.id_dosen==dosen.id %} selected
+                                                            {% endif %} {% endfor %}>
+                                                            {{ dosen.nama_dosen }}
+                                                        </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-3">
+                                                    <label for="sekretaris" class="form-label">Sekretaris</label>
+                                                </div>
+                                                <div class="col-9">
+                                                    <select class="form-select listdosen" id="sekretaris"
+                                                        name="sekretaris">
+                                                        {% for dosen in dosen %}
+                                                        <option value={{ dosen.id }} {% for ds in seminar.dosen_roles %}
+                                                            {% if ds.peran==2 and ds.id_dosen==dosen.id %} selected {%
+                                                            endif %} {% endfor %}>
+                                                            {{ dosen.nama_dosen }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-3">
+                                                    <label for="anggota" class="form-label">Anggota</label>
+                                                </div>
+                                                <div class="col-9">
+                                                    <select class="form-select listdosen" id="anggota" name="anggota"
+                                                        required>
+                                                        {% for dosen in dosen %}
+                                                        <option value={{ dosen.id }} {% for ds in seminar.dosen_roles %}
+                                                            {% if ds.peran==3 and ds.id_dosen==dosen.id %} selected {%
+                                                            endif %} {% endfor %}>
+                                                            {{ dosen.nama_dosen }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="row g-2 align-items-center">
+                                                <div class="col-4">
+                                                    <label for="pembimbing1" class="form-label">Pembimbing 1</label>
+                                                </div>
+                                                <div class="col-8">
+                                                    <select class="form-select listdosen" id="pembimbing1"
+                                                        name="pembimbing1">
+                                                        {% for dosen in dosen %}
+                                                        <option value={{ dosen.id }} {% for ds in seminar.dosen_roles %}
+                                                            {% if ds.peran==4 and ds.id_dosen==dosen.id %} selected {%
+                                                            endif %} {% endfor %}>
+                                                            {{ dosen.nama_dosen }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-4">
+                                                    <label for="pembimbing2" class="form-label">Pembimbing 2</label>
+                                                </div>
+                                                <div class="col-8">
+                                                    <select class="form-select listdosen" id="pembimbing2"
+                                                        name="pembimbing2" required>
+                                                        {% for dosen in dosen %}
+                                                        <option value={{ dosen.id }} {% for ds in seminar.dosen_roles %}
+                                                            {% if ds.peran==5 and ds.id_dosen==dosen.id %} selected {%
+                                                            endif %} {% endfor %}>
+                                                            {{ dosen.nama_dosen }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="card-footer">
+                                <div class="d-flex justify-content-between">
+                                    <button type="button" class="btn btn-danger hapus-seminar"
+                                        data-seminar-id="{{ seminar.id }}">Hapus</button>
+                                    <button type="button" class="btn btn-primary">Ubah</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--end::Row-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::App Content-->
+    {% endblock %}
+
+    {% block scripts %}
+    <script>
+        $('.listdosen').select2({
+            theme: "bootstrap-5",
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            dropdownParent: $('#ubahseminar')
+        });
+
+        $(document).ready(function () {
+            $('#tambahseminar').on('submit', function (e) {
+                e.preventDefault();
+
+                // Ambil nilai form
+                const nim = $('#nim').val();
+                const tanggal = $('#tanggal').val();
+                const waktu = $('#waktu').val();
+
+                // Gabungkan tanggal dan waktu menjadi datetime string
+                const waktuSeminar = tanggal + 'T' + waktu + ':00';
+
+                // Buat object JSON sesuai dengan schema DataSeminar
+                const jsonData = {
+                    nim: nim,
+                    jenis_seminar: parseInt($('#seminar').val()),
+                    judul_skripsi: $('#judul').val(),
+                    waktu_seminar: waktuSeminar,
+                    ruangan: $('#ruang').val(),
+                    status: 1, // terjadwal
+                    // Data dosen (belum dihandle di backend)
+                    ketua_id: $('#ketua').val(),
+                    sekretaris_id: $('#sekretaris').val(),
+                    anggota_id: $('#anggota').val(),
+                    pembimbing1_id: $('#pembimbing1').val(),
+                    pembimbing2_id: $('#pembimbing2').val()
+                };
+
+                // console.log('JSON Data:', JSON.stringify(jsonData));
+
+                $.ajax({
+                    url: '/admin/tambah-seminar',
+                    type: 'POST',
+                    data: JSON.stringify(jsonData),
+                    contentType: 'application/json',
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Berhasil!',
+                            text: 'Data seminar berhasil ditambahkan',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            // Reset form & tutup modal
+                            // $('#tambahseminar')[0].reset();
+                            // $('.listdosen').val(null).trigger('change');
+                            // $('#tambahseminarModal').modal('hide');
+                            location.reload(); // Refresh halaman untuk lihat data baru
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        const errorMsg = xhr.responseJSON?.detail || xhr.responseText || 'Gagal menambahkan data';
+                        Swal.fire({
+                            title: 'Error!',
+                            text: errorMsg,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            });
+
+            // Handle delete seminar
+            $('.hapus-seminar').on('click', function (e) {
+                e.preventDefault();
+                const seminarId = $(this).data('seminar-id');
+
+                Swal.fire({
+                    title: 'Konfirmasi Hapus',
+                    text: 'Apakah Anda yakin ingin menghapus seminar ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `/admin/hapus-seminar/${seminarId}`,
+                            type: 'DELETE',
+                            success: function (response) {
+                                Swal.fire({
+                                    title: 'Berhasil!',
+                                    text: 'Data seminar berhasil dihapus',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    window.location.href = '/admin'; // Redirect ke halaman utama admin
+                                });
+                            },
+                            error: function (xhr, status, error) {
+                                const errorMsg = xhr.responseJSON?.detail || xhr.responseText || 'Gagal menghapus data';
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: errorMsg,
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        });
+                    }
+                });
+            }); //end for delete seminar
+        }); //end for document.ready
+    </script>
+    {% endblock %}

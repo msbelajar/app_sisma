@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block menusidebar %}
+{% include "admin/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<!--begin::App Content Header-->
+<div class="app-content-header">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <!--begin::Row-->
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-between">
+                <h4 class="mb-2">Data Mahasiswa</h4>
+                <div>
+                   
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahmahasiswaModal">
+                        Tambah Data Mahasiswa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end::Container-->
+    <div class="modal fade" id="tambahmahasiswaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Data Mahasiswa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                        <label class="form-label">NIM Nama (from excel)</label>
+                         <textarea class="form-control" rows="10" required
+                                placeholder="Copy from Excel NIM Nama (tab separated)"></textarea>
+                  </form>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="app-content">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <!--begin::Row-->
+        <div class="card mb-4">
+            <div class="card-header">
+                 <form class="d-flex gap-2" action="/admin/carimhs" method="post">
+                        <input style="width: 300px;" type="text" name="cari" class="form-control" required placeholder="NIM / Nama">
+                        <button type="submit" class="btn btn-primary">Cari</button>
+                  </form>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <table class="table table-striped" role="table">
+                    <thead>
+                        <tr >
+                            <th scope="col">#</th>
+                            <!-- <th style="width: 10px" scope="col">#</th> -->
+                            <th scope="col">NIM</th>
+                            <th scope="col">Nama</th>
+                            <th scope="col">Aksi</th>
+                            <!-- <th style="width: 40px" scope="col">Aksi</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for mhs in data %}
+                        <tr class="align-middle">
+                            <td>{{ loop.index }}</td>
+                            <td>{{ mhs.nim }}</td>
+                            <td>{{ mhs.nama_mahasiswa }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary">Edit</button>
+                                <button class="btn btn-sm btn-danger">Delete</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!--end::Row-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::App Content-->
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

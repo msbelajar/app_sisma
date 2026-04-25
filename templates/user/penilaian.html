@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block menusidebar %}
+{% include "user/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<!--begin::App Content Header-->
+<div class="app-content-header">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <!--begin::Row-->
+        <div class="row">
+            <div class="col-sm-6">
+                <h4 class="mb-0">Input Nilai</h4>
+            </div>
+        </div>
+        <!--end::Row-->
+    </div>
+    <!--end::Container-->
+</div>
+<div class="app-content">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <!--begin::Row-->
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title"><b>F1A121001 - JOHN DOE</b></h3>
+                    </div>
+                    <div class="card-body">
+                        Judul : Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.
+                        <hr>
+                        <i class="bi bi-geo-alt"></i> Ruang Seminar | <i class="bi bi-calendar"></i> Kamis 20 Juli 2023,
+                        10.00 WIB
+                        <hr>
+                        <ul class="list-group">
+                            <li class="list-group-item">Ketua : Dr. A</li>
+                            <li class="list-group-item">Sekretaris : Dr. B</li>
+                            <li class="list-group-item">Anggota : Dr. C</li>
+                            <li class="list-group-item">Pembimbing 1 : Dr. F</li>
+                            <li class="list-group-item">Pembimbing 2 : Dr. G</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title"><b>Komponen Penilaian</b></h3>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="row g-3 align-items-center mb-3">
+                                <div class="col-9">
+                                    <label for="penulisan" class="col-form-label">Penulisan</label>
+                                </div>
+                                <div class="col-3">
+                                    <input type="number" id="penulisan" class="form-control" min="0" max="100">
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center mb-3">
+                                <div class="col-9">
+                                    <label for="Materi" class="col-form-label">Materi</label>
+                                </div>
+                                <div class="col-3">
+                                    <input type="number" id="Materi" class="form-control" min="0" max="100">
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center mb-3">
+                                <div class="col-9">
+                                    <label for="penyajian" class="col-form-label">Penyajian</label>
+                                </div>
+                                <div class="col-3">
+                                    <input type="number" id="penyajian" class="form-control" min="0" max="100">
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center mb-3">
+                                <div class="col-9">
+                                    <label for="pembimbingan" class="col-form-label">Pembimbingan</label>
+                                </div>
+                                <div class="col-3">
+                                    <input type="number" id="pembimbingan" class="form-control" min="0" max="100">
+                                </div>
+                            </div>
+                    </div>
+                    <div class="card-footer mb-0">
+                        <p>Keterangan : Nilai A &ge; 81, Nilai B < 81, Mengulang < 65</p>
+                    </div>
+                    <div class="card-footer text-end">
+                        <!-- <a href="/dosen/penilaian" class="btn btn-success">Kirim Nilai</a> -->
+                        <button type="submit" class="btn btn-primary">Kirim Nilai</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--end::Row-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::App Content-->
+{% endblock %}

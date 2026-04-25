@@ -4,4 +4,6 @@ __pycache__/
 .env
 testdb.py
 *.csv
-feeddb.py
+feeddby.py
+Dockerfile
+docker-compose.yml

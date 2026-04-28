@@ -2,14 +2,26 @@ from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
-from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from routers import admin, dosen, test, auth, root
 from security import verify_cookie_token
 
 app = FastAPI(title="App Seminar")
 
-# Better than custom HTTPS middleware
-app.add_middleware(ProxyHeadersMiddleware)
+# Custom middleware to fix HTTPS scheme
+class HTTPSRedirectMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        # Get the X-Forwarded-Proto header from reverse proxy
+        forwarded_proto = request.headers.get("x-forwarded-proto")
+        if forwarded_proto == "https":
+            request.scope["scheme"] = "https"
+            # Also set the URL scheme
+            request.scope["asgi"]["scheme"] = "https"
+        response = await call_next(request)
+        return response
+
+# Add the HTTPS middleware
+app.add_middleware(HTTPSRedirectMiddleware)
 
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")

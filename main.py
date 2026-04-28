@@ -2,10 +2,16 @@ from fastapi import Depends, FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from routers import admin, dosen, test, auth, root
 from security import verify_cookie_token
 
 app = FastAPI(title="App Seminar")
+
+# Add middleware to handle HTTPS from reverse proxy
+app.add_middleware(
+    TrustedHostMiddleware, allowed_hosts=["sisma.fmipa.uho.ac.id"]
+)
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

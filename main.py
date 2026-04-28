@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -13,6 +13,16 @@ app.add_middleware(ProxyHeadersMiddleware)
 
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Temporary debug endpoint to check headers
+@app.get("/debug-headers")
+async def debug_headers(request: Request):
+    return {
+        "scheme": request.url.scheme,
+        "x-forwarded-proto": request.headers.get('x-forwarded-proto'),
+        "x-forwarded-for": request.headers.get('x-forwarded-for'),
+        "host": request.headers.get('host'),
+    }
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request, exc):

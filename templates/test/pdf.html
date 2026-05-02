@@ -8,5 +8,12 @@
 <body>
     <h1>PDF Test</h1>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.</p>
+
+    <p>{{ data.title }}</p>
+
+    {% for item in data.items %}
+        {{ item.name }} - 
+        {{ item.value }}
+    {% endfor %}
 </body>
 </html>

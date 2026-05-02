@@ -12,14 +12,12 @@
         <!--begin::Row-->
         <div class="row">
             <div class="col-sm-6">
-                <h3 class="mb-0">Dashboard v3</h3>
+                {% if status  %}
+                <h4 class="mb-0">Data Seminar telah Finalisasi Nilai</h4>
+                {% else %}
+                <h4 class="mb-0">Data Seminar Terjadwal</h4>
+                {% endif %}
             </div>
-            <!-- <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-end">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Dashboard v3</li>
-                </ol>
-            </div> -->
         </div>
         <!--end::Row-->
     </div>
@@ -30,93 +28,71 @@
     <div class="container-fluid">
         <!--begin::Row-->
         <div class="row g-3">
+            {% for x in data %}
             <div class="col-md-6">
+                {% if x.seminar.jenis_seminar == 1 %}
                 <div class="card card-secondary">
-                    <div class="card-header">
-                        <h3 class="card-title">F1A121001 - JOHN DOE</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse" title="Collapse">
-                                <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                                <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                            </button>
+                    {% else %}
+                    <div class="card card-warning">
+                        {% endif %}
+                        <div class="card-header text-white">
+                            <h3 class="card-title">{{ x.seminar.nim }} - {{ x.seminar.mahasiswa.nama_mahasiswa }}</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-2">
+                                {% if x.seminar.jenis_seminar == 1 %}
+                                <span class="badge text-bg-secondary">Seminar Proposal</span>
+                                {% else %}
+                                <span class="badge text-bg-warning text-white">Seminar Akhir</span>
+                                {% endif %}
+                            </div>
+                            <i class="bi bi-geo-alt"></i> {{ x.seminar.ruangan }} | <i class="bi bi-calendar"></i> <span
+                                data-tanggal>{{ x.seminar.waktu_seminar }}</span>
+                            | <i class="bi bi-clock"></i> <span>{{ x.seminar.waktu_seminar.strftime('%H.%M WITA')
+                                }}</span>
+                            <hr>
+                            Judul : {{ x.seminar.judul_skripsi }}
+                            <hr>
+                            <ul class="list-group">
+                                {% for y in x.seminar.dosen_roles %}
+                                {% if y.peran == 1 %}
+                                <li class="list-group-item">Ketua : {{ y.dosen.nama_dosen }}</li>
+                                {% elif y.peran == 2 %}
+                                <li class="list-group-item">Sekretaris : {{ y.dosen.nama_dosen }}</li>
+                                {% elif y.peran == 3 %}
+                                <li class="list-group-item">Anggota : {{ y.dosen.nama_dosen }}</li>
+                                {% elif y.peran == 4 %}
+                                <li class="list-group-item">Pembimbing 1 : {{ y.dosen.nama_dosen }}</li>
+                                {% elif y.peran == 5 %}
+                                <li class="list-group-item">Pembimbing 2 : {{ y.dosen.nama_dosen }}</li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-between">
+                                <a href="/dosen/rekap/{{ x.seminar.slug }}" class="btn btn-danger text-white">Rekap
+                                    Nilai</a>
+                                {% if x.seminar.status == 1 %}
+                                    {% if x.penilaian %}
+                                        <a href="/dosen/penilaian/ubah/{{ x.seminar.slug }}" class="btn btn-success">Ubah Nilai</a>
+                                    {% else %}
+                                        <a href="/dosen/penilaian/{{ x.seminar.slug }}" class="btn btn-primary">Input Nilai</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        Judul : Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.
-                        <hr>
-                        <i class="bi bi-geo-alt"></i> Ruang Seminar | <i class="bi bi-calendar"></i> Kamis 20 Juli 2023,
-                        10.00 WIB
-                        <hr>
-                        <ul class="list-group">
-                            <li class="list-group-item">Ketua : Dr. A</li>
-                            <li class="list-group-item">Sekretaris : Dr. B</li>
-                            <li class="list-group-item">Anggota : Dr. C</li>
-                            <li class="list-group-item">Pembimbing 1 : Dr. F</li>
-                            <li class="list-group-item">Pembimbing 2 : Dr. G</li>
-                        </ul>
-                    </div>
-                    <div class="card-footer text-end">
-                        <a href="/dosen/penilaian" class="btn btn-primary">Input Nilai</a>
-                        <!-- <button type="submit" class="btn btn-primary">Input Nilai</button> -->
-                    </div>
                 </div>
+                {% endfor %}
             </div>
-            <div class="col-md-6">
-                <div class="card card-secondary">
-                    <div class="card-header">
-                        <h3 class="card-title">F1A121001 - JOHN DOE</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse" title="Collapse">
-                                <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                                <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        Judul : Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.
-                        <hr>
-                        Ruang Seminar, Kamis 20 Juli 2023, 10.00 WIB
-                        <hr>
-                        <ul class="list-group">
-                            <li class="list-group-item">Ketua : Dr. A</li>
-                            <li class="list-group-item">Sekretaris : Dr. B</li>
-                            <li class="list-group-item">Anggota : Dr. C</li>
-                            <li class="list-group-item">Pembimbing 1 : Dr. F</li>
-                            <li class="list-group-item">Pembimbing 2 : Dr. G</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card card-info">
-                    <div class="card-header">
-                        <h3 class="card-title">F1A121001 - JOHN DOE</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse" title="Collapse">
-                                <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                                <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        Judul : Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.
-                        <hr>
-                        Ruang Seminar, Kamis 20 Juli 2023, 10.00 WIB
-                        <hr>
-                        <ul class="list-group">
-                            <li class="list-group-item">Ketua : Dr. A</li>
-                            <li class="list-group-item">Sekretaris : Dr. B</li>
-                            <li class="list-group-item">Anggota : Dr. C</li>
-                            <li class="list-group-item">Pembimbing 1 : Dr. F</li>
-                            <li class="list-group-item">Pembimbing 2 : Dr. G</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <!--end::Row-->
         </div>
-        <!--end::Row-->
+        <!--end::Container-->
     </div>
-    <!--end::Container-->
-</div>
-<!--end::App Content-->
-{% endblock %}
+    <!--end::App Content-->
+    {% endblock %}
+
+    {% block scripts %}
+    <script src={{ url_for('static', path='js/dateid.js' ) }}></script>
+    {% endblock %}

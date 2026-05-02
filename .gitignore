@@ -4,6 +4,7 @@ __pycache__/
 .env
 testdb.py
 *.csv
+*.xlsx
 feeddby.py
 Dockerfile
 docker-compose.yml

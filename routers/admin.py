@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from models import Mahasiswa, Dosen, Seminar, SeminarDosen, get_db
 from schemas import Role, SeminarDosen as SeminarDosenSchema, Peran, TambahSeminarRequest, StatusSeminar
 from datetime import datetime
+from security import user_cookies
 
 router = APIRouter()    
 
@@ -13,8 +14,13 @@ templates = Jinja2Templates(directory="templates")
 @router.get("/", response_class=HTMLResponse)
 def admin_dashboard(request: Request, db: Session = Depends(get_db)):
     dosen = db.query(Dosen).filter(Dosen.role == Role.dosen).all()
-    seminar = db.query(Seminar).filter(Seminar.status == StatusSeminar.terjadwal).order_by(Seminar.waktu_seminar.desc()).all()
+    seminar = db.query(Seminar).filter(Seminar.status == StatusSeminar.terjadwal).order_by(Seminar.waktu_seminar.asc()).all()
     return templates.TemplateResponse("admin/home.html", {"request": request, "dosen": dosen, "seminar": seminar})
+
+@router.get("/seminar-final", response_class=HTMLResponse)
+def seminar_final(request: Request, db: Session = Depends(get_db)):
+    seminar = db.query(Seminar).filter(Seminar.status == StatusSeminar.final).order_by(Seminar.waktu_seminar.asc()).all()
+    return templates.TemplateResponse("admin/seminar-final.html", {"request": request, "seminar": seminar, "status": "telah Finalisasi Nilai"})
 
 @router.post("/tambah-seminar")
 async def tambah_seminar(request_data: TambahSeminarRequest, db: Session = Depends(get_db)):

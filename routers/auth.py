@@ -26,7 +26,7 @@ def login_post(request: Request, username: str = Form(), password: str = Form(),
     if dosen:
         if checkpass(password, dosen.password):
             # Create access token
-            token_data = {"sub": dosen.nip, "role": dosen.role}
+            token_data = {"sub": dosen.nip, "role": dosen.role, "name": dosen.nama_dosen}
             access_token = create_access_token(token_data)
             
             # Create response and set cookie
@@ -40,7 +40,15 @@ def login_post(request: Request, username: str = Form(), password: str = Form(),
                 key="access_token",
                 value=access_token,
                 httponly=True,
-                secure=False,  # Set to True in production with HTTPS
+                secure=True,  # Set to True in production with HTTPS
+                samesite="lax",
+                max_age=60*60*24*7*expires_week  # in weeks
+            )
+            response.set_cookie(
+                key="name",
+                value=dosen.nama_dosen,
+                httponly=True,
+                secure=True,  # Set to True in production with HTTPS
                 samesite="lax",
                 max_age=60*60*24*7*expires_week  # in weeks
             )
@@ -55,5 +63,6 @@ def login_post(request: Request, username: str = Form(), password: str = Form(),
 def logout(response: Response):
     response = RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
     response.delete_cookie(key="access_token")
+    response.delete_cookie(key="name")
     return response
 

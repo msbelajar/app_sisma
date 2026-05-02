@@ -1,18 +1,14 @@
 import datetime
 from typing import Optional
-from fastapi import HTTPException, Depends, status, Cookie
+from fastapi import HTTPException, Depends, Request, status, Cookie
 from random import randint
 from schemas import Role
-# from passlib.context import CryptContext
 import bcrypt
-from fastapi.responses import RedirectResponse
 from jose import jwt, JWTError
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
-
-# pwd = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def rand_password(digit:int=6):
     return str(randint(10**(digit-1), 10**digit - 1))    
@@ -66,38 +62,46 @@ def verify_cookie_token(access_token: Optional[str] = Cookie(None)):
             detail="Invalid or expired token"
         )
 
-# def get_current_user(token:str = Depends(oauth2sch)):
-#     credentials_exception = HTTPException(
-#         status_code=status.HTTP_401_UNAUTHORIZED,
-#         detail="invalid"
-#     )
-#     try:
-#         payload = jwt.decode(token, os.getenv("JWT_SECRET"), algorithms=[os.getenv("JWT_ALGORITHM")])
-#         return UserC(username=payload.get("sub"), name=payload.get("name") ,role=payload.get("role"))
-#     except:
-#         raise credentials_exception
+def user_cookies(request : Request):
+    token = request.cookies.get("access_token")
+    if not token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated"
+        )
+    try:
+        payload = jwt.decode(token, os.getenv("JWT_SECRET"), algorithms=[os.getenv("JWT_ALGORITHM")])
+        return payload
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired token"
+        )
     
-def permission(min_allow:Role):
+    
+def permission(min_allow:Role = Role.admin, data = Depends(user_cookies)):
     credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="not allowed"
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="not allowed - insufficient permissions"
     )
     try:
-        payload = verify_cookie_token()
-        if payload.role > min_allow:
+        print(f"User role: {data.get('role')}, Required role: {min_allow}")
+        # Only allow if user's role is <= min_allow (lower number = higher privilege)
+        if data.get("role") > min_allow:
              raise credentials_exception
     except HTTPException:
         raise credentials_exception
 
-# def check_auth_mhs(nim:str, data : UserC):
-#     credentials_exception = HTTPException(
-#         status_code=status.HTTP_401_UNAUTHORIZED,
-#         detail="invalid",
-#     )
-#     try:
-#         if data.username == nim or data.role < Role.mahasiswa:
-#             return data
-#         else:
-#             credentials_exception
-#     except:
-#         raise credentials_exception
+def require_permission(min_allow: Role):
+    def permission_check(data = Depends(user_cookies)):
+        credentials_exception = HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="not allowed - insufficient permissions"
+        )
+        try:
+            # print(f"User role: {data.get('role')}, Required role: {min_allow}")
+            if data.get("role") > min_allow:
+                raise credentials_exception
+        except HTTPException:
+            raise credentials_exception
+    return permission_check

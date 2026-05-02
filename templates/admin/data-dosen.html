@@ -17,8 +17,8 @@
             <div class="col-md-12 d-flex justify-content-between">
                 <h4 class="mb-2">Data Dosen</h4>
                 <div>
-                   
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahdosenModal">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                        data-bs-target="#tambahdosenModal">
                         Tambah Data Dosen
                     </button>
                 </div>
@@ -34,11 +34,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <form>
+                    <form>
                         <label class="form-label">NIP Nama (from excel)</label>
-                         <textarea class="form-control" rows="10" required
-                                placeholder="Copy from Excel NIP Nama (tab separated)"></textarea>
-                  </form>
+                        <textarea class="form-control" rows="10" required
+                            placeholder="Copy from Excel NIP Nama (tab separated)"></textarea>
+                    </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -54,16 +54,17 @@
         <!--begin::Row-->
         <div class="card mb-4">
             <div class="card-header">
-                 <form class="d-flex gap-2" action="/admin/caridosen" method="post">
-                        <input style="width: 300px;" type="text" name="cari" class="form-control" required placeholder="NIM / Nama">
-                        <button type="submit" class="btn btn-primary">Cari</button>
-                  </form>
+                <form class="d-flex gap-2" action="/admin/caridosen" method="post">
+                    <input style="width: 300px;" type="text" name="cari" class="form-control" required
+                        placeholder="NIM / Nama">
+                    <button type="submit" class="btn btn-primary">Cari</button>
+                </form>
             </div>
             <!-- /.card-header -->
             <div class="card-body p-0">
                 <table class="table table-striped" role="table">
                     <thead>
-                        <tr >
+                        <tr>
                             <th scope="col">#</th>
                             <!-- <th style="width: 10px" scope="col">#</th> -->
                             <th scope="col">NIP</th>

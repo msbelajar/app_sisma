@@ -46,6 +46,7 @@ class Dosen(Base):
     role = Column(Enum(Role), default=Role.dosen)
     email = Column(String(100), unique=True)
     password = Column(String(255))
+    tandatangan = Column(String(255))
     seminar_roles = relationship("SeminarDosen", back_populates="dosen")
 
 class Mahasiswa(Base):
@@ -84,9 +85,10 @@ class SeminarDosen(Base):
 class KomponenNilai(Base):
     __tablename__ = "komponen_nilai"
     id_komponen = Column(Integer, primary_key=True)
-    kode_komponen = Column(String(2))
+    # kode_komponen = Column(String(2), unique=True)
     urutan = Column(Integer, unique=True)
     nama_komponen = Column(String(100))
+    bobot = Column(Integer)
     penilaian = relationship("Penilaian", back_populates="komponen")
 
 class Penilaian(Base):

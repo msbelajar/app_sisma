@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block menusidebar %}
+{% include "user/sidebar.html" %}
+{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}
+
+{% block content %}
+<!--begin::App Content Header-->
+<div class="app-content-header">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <!--begin::Row-->
+        <div class="row">
+            <div class="col-sm-6">
+                <h3 class="mb-0">Rekap Nilai</h3>
+            </div>
+        </div>
+        <!--end::Row-->
+    </div>
+    <!--end::Container-->
+</div>
+<div class="app-content">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <!--begin::Row-->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="card-title fw-bold">{{ seminar.nim }} - {{ seminar.mahasiswa.nama_mahasiswa }}
+                            </h3>
+                            <button class="btn btn-warning" onclick="location.reload()">Refresh</button>
+                        </div>
+                    </div>
+                        <div class="card-body">
+                            <div class="mb-2">
+                                {% if seminar.jenis_seminar == 1 %}
+                                <span class="badge text-bg-secondary">Seminar Proposal</span>
+                                {% else %}
+                                <span class="badge text-bg-warning text-white">Seminar Akhir</span>
+                                {% endif %}
+                            </div>
+                            <i class="bi bi-geo-alt"></i> {{ seminar.ruangan }} | <i class="bi bi-calendar"></i> <span
+                                data-tanggal>{{ seminar.waktu_seminar.strftime('%A, %d %B %Y') }}</span> | <i
+                                class="bi bi-clock"></i> <span>{{ seminar.waktu_seminar.strftime('%H.%M WITA') }}</span>
+                            <hr>
+                            Judul : {{seminar.judul_skripsi }}
+                            <hr>
+                            <table class="table table-striped" role="table">
+                                <thead>
+                                    <tr>
+                                        <!-- <th scope="col">#</th> -->
+                                        <!-- <th style="width: 10px" scope="col">#</th> -->
+                                        <th style="width: 300px" scope="col">Dosen</th>
+                                        <th style="width: 30px" scope="col">Status</th>
+                                        <th style="width: 30px" scope="col" class="text-center">Penulisan</th>
+                                        <th style="width: 30px" scope="col" class="text-center">Materi</th>
+                                        <th style="width: 30px" scope="col" class="text-center">Penyajian</th>
+                                        <th style="width: 30px" scope="col" class="text-center">Bimbingan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for x in seminar.dosen_roles %}
+                                    <tr class="align-middle">
+                                        <td>{{ x.dosen.nama_dosen }}</td>
+                                        <td>{{ x.peran.name }}</td>
+                                        {% for p in x.penilaian %}
+                                        <td class="text-center">{{ p.nilai }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <hr>
+                            {% if hasil %}
+                            <div class="alert alert-info" role="alert">
+                                <h5 class="fw-bold text-center">Nilai Akhir Seminar = {{ hasil.nilai_akhir }}  ({{ hasil.grade }})</h5>
+                            </div>
+                            <span class="badge text-bg-light">Klik Finalisasi untuk nilai terbaru</span>
+                            <span class="badge text-bg-secondary">Klik Batalkan untuk edit/kirim nilai terbaru</span>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-between">
+                                {% if dosen.peran == 1 or dosen.peran == 2 %}
+                                    {% if seminar.status == 1 %}
+                                        <button type="button" id="btnfinalisasi" class="btn btn-success">Finalisasi</button>
+                                    {% endif %}
+                                    {% if seminar.status == 2 %}
+                                        <button type="button" class="btn btn-primary">File Berita Acara</button>
+                                        <button type="button" id="btnbatal" class="btn btn-danger">Batalkan</button>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+<!--end::Row-->
+<!--end::Container-->
+</div>
+<!--end::App Content-->
+{% endblock %}
+
+{% block scripts %}
+<script src={{ url_for('static', path='js/dateid.js' ) }}></script>
+<script>
+    $(document).ready(function () {
+        $('#btnfinalisasi').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/dosen/rekap/{{ seminar.slug }}',
+                type: 'POST',
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Nilai akhir terbaru',
+                        icon: 'success',
+                        timer : 3000,
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload(); // Refresh halaman
+                    });
+                },
+                error: function (xhr, status, error) {
+                    const errorMsg = xhr.responseJSON?.detail || xhr.responseText || 'error';
+                    Swal.fire({
+                        title: 'Error!',
+                        text: errorMsg,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }); //end btnfinal
+
+        $('#btnbatal').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/dosen/batalrekap/{{ seminar.slug }}',
+                type: 'PUT',
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Finalisasi seminar berhasil dibatalkan',
+                        icon: 'success',
+                        timer : 3000,
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload(); // Refresh halaman
+                    });
+                },
+                error: function (xhr, status, error) {
+                    const errorMsg = xhr.responseJSON?.detail || xhr.responseText || 'error';
+                    Swal.fire({
+                        title: 'Error!',
+                        text: errorMsg,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }); //end btnbatal
+    }); //end of doc ready
+</script>
+{% endblock %}

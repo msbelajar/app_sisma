@@ -20,8 +20,13 @@ class Seminar(IntEnum):
 
 class StatusSeminar(IntEnum):
     terjadwal = 1
-    selesai = 2
-    batal = 3
+    final = 2
+    selesai = 3
+
+class Token(BaseModel):
+    sub : str
+    role : Role
+    name : str
 
 class DataSeminar(BaseModel):
     nim: str
@@ -36,6 +41,12 @@ class SeminarDosen(BaseModel):
     id_dosen: int
     peran: Peran
 
+class KomNilaiSem(BaseModel):
+    penulisan : int
+    materi : int
+    penyajian : int
+    pembimbingan : int = 0
+
 class TambahSeminarRequest(BaseModel):
     nim: str
     jenis_seminar: Seminar
@@ -48,3 +59,11 @@ class TambahSeminarRequest(BaseModel):
     anggota_id: Optional[int] = None
     pembimbing1_id: Optional[int] = None
     pembimbing2_id: Optional[int] = None
+
+class UbahProfil(BaseModel):
+    nip: str
+    nama_dosen: str
+
+class UbahPassword(BaseModel):
+    password_lama: str
+    password_baru: str

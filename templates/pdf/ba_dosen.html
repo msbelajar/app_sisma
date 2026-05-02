@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Berita Acara Seminar</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 12pt;
+            line-height: 1.25;
+            color: #000;
+            background: #fff;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        hr {
+            border: 1.3px solid #000;
+            /* border-top: 3px solid #000; */
+            margin: 0;
+        }
+
+        .page {
+            width: 100%;
+        }
+
+        .kop-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .kop-logo-cell {
+            width: 95px;
+            vertical-align: top;
+            padding: 0;
+            position: relative;
+        }
+
+        .kop-logo-box {
+            position: relative;
+            width: 100px;
+            height: 100px;
+
+            /* Atur posisi logo dari sini */
+            padding-top: 5px;
+            padding-left: 2px;
+        }
+
+        .kop-logo {
+            width: 120px;
+            height: auto;
+            display: block;
+        }
+
+        .kop-text {
+            text-align: center;
+            vertical-align: top;
+            padding-right: 86px;
+        }
+
+        .kop-title {
+            font-size: 12pt;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        .kop-jurusan {
+            font-size: 13pt;
+            line-height: 1.2;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .kop-address {
+            font-size: 11pt;
+            line-height: 1.2;
+            margin-top: 0px;
+        }
+
+        .paragraph {
+            margin: 10px 0 8px 0;
+        }
+
+        .identity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2px 0 0 0;
+        }
+
+        .identity-table td {
+            padding: 2px 0;
+            vertical-align: top;
+            font-size: 12pt;
+        }
+
+        .indent-cell {
+            width: 58px;
+        }
+
+        .label-cell {
+            width: 100px;
+            white-space: nowrap;
+        }
+
+        .colon-cell {
+            width: 20px;
+            text-align: center;
+        }
+
+        .value-cell {
+            width: auto;
+        }
+
+        .thesis-title {
+            text-align: center;
+            margin-top: 0px;
+            line-height: 1.35;
+            font-size: 12pt;
+            font-weight: bold;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .score-table {
+            border-collapse: collapse;
+            /* table-layout: fixed; */
+            margin: 4px auto 18px auto;
+        }
+
+        .score-table th,
+        .score-table td {
+            border: 1px solid #000;
+            padding: 6px 8px;
+            font-size: 12pt;
+            vertical-align: top;
+        }
+
+        .score-table th {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .score-aspect {
+            width: 250px;
+        }
+
+        .score-value {
+            width: 150px;
+            text-align: center;
+        }
+
+        .score-final {
+            width: 150px;
+        }
+
+        .score-number {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .note-cell {
+            line-height: 1.25;
+        }
+
+        .note-title {
+            margin-bottom: 8px;
+        }
+
+        .formula {
+            margin-top: 8px;
+        }
+
+        .closing {
+            margin-top: 12px;
+            margin-bottom: 22px;
+        }
+
+        .signature-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 4px;
+        }
+
+        .signature-left {
+            width: 55%;
+        }
+
+        .signature-right {
+            width: 45%;
+            vertical-align: top;
+            text-align: left;
+            font-size: 12pt;
+        }
+
+        .signature-img-wrap {
+            height: 70px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .signature-img {
+            /* max-width: 210px; */
+            width: auto;
+            height: 100%;
+            display: block;
+            object-fit: contain;
+        }
+
+        .signature-name {
+            font-weight: bold;
+        }
+
+        .nip {
+            margin-top: 2px;
+        }
+
+        .no-border {
+            border: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <table class="kop-table">
+            <tr>
+                <td class="kop-logo-cell">
+                    <div class="kop-logo-box">
+                        <img class="kop-logo" src="{{ url_for('static', path='/assets/img/logo_uho.png') }}"
+                            alt="Logo Universitas Halu Oleo">
+                    </div>
+                </td>
+
+                <td class="kop-text">
+                    <p class="kop-title">KEMENTERIAN PENDIDIKAN TINGGI, SAINS DAN TEKNOLOGI</p>
+                    <p class="kop-title">UNIVERSITAS HALU OLEO</p>
+                    <p class="kop-title">FAKULTAS MATEMATIKA DAN ILMU PENGETAHUAN ALAM</p>
+                    <p class="kop-title">JURUSAN MATEMATIKA</p>
+                    <p class="kop-jurusan">PROGRAM STUDI MATEMATIKA</p>
+
+                    <div class="kop-address">
+                        Kampus Hijau Bumi Tridharma, Anduonohu, Kendari, Sulawesi Tenggara 93232<br>
+                        Telp. (0401) 3191929, Fax. (0401) 3190496, laman: www.fmipa.uho.ac.id
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <hr>
+
+        <p class="paragraph">Yang bertanda tangan di bawah ini:</p>
+
+        <table class="identity-table">
+            <tr>
+                <td class="indent-cell"></td>
+                <td class="label-cell">Nama</td>
+                <td class="colon-cell">:</td>
+                <td class="value-cell">AAAAA</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>NIP</td>
+                <td class="colon-cell">:</td>
+                <td>BBBBBB</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Program Studi</td>
+                <td class="colon-cell">:</td>
+                <td>CCCCCC</td>
+            </tr>
+        </table>
+
+        <p class="paragraph">Dengan ini memberikan penilaian kepada mahasiswa:</p>
+
+        <table class="identity-table">
+            <tr>
+                <td class="indent-cell"></td>
+                <td class="label-cell">Nama</td>
+                <td class="colon-cell">:</td>
+                <td class="value-cell">ARSYANIF</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>NIM</td>
+                <td class="colon-cell">:</td>
+                <td>YIMSA</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Judul Skripsi</td>
+                <td class="colon-cell">:</td>
+                <td></td>
+            </tr>
+        </table>
+
+        <div class="thesis-title">
+            Pengaruh Penggunaan ChatGPT terhadap Kemampuan Mahasiswa dalam Menyelesaikan Soal Matematika Tingkat
+            SMP Pengaruh Penggunaan ChatGPT terhadap Kemampuan Mahasiswa dalam Menyelesaikan Soal Matematika Tingkat
+            SMP 
+        </div>
+        
+        <p class="paragraph">adalah sebagai berikut:</p>
+
+        <table class="score-table">
+            <thead>
+                <tr>
+                    <th class="score-aspect">Aspek yang dinilai</th>
+                    <th class="score-value">Nilai (0-100)</th>
+                    <th class="score-final">Nilai Akhir (NA)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Penulisan (A)</td>
+                    <td class="score-number">100</td>
+                    <td class="note-cell" rowspan="4">
+                        <div class="note-title">Keterangan :</div>
+                        <div class="formula">NA = 20%A+40%B+20%C+20%D</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Materi (B)</td>
+                    <td class="score-number">200</td>
+                </tr>
+                <tr>
+                    <td>Penyajian (C)</td>
+                    <td class="score-number">150</td>
+                </tr>
+                <tr>
+                    <td>Pembimbingan (D)</td>
+                    <td class="score-number">100</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="closing">Demikian penilaian ini untuk dipergunakan sebagaimana mestinya.</p>
+
+        <table class="signature-table">
+            <tr>
+                <td class="signature-left"></td>
+                <td class="signature-right">
+                    <div>Kendari, 5 Oktober 2026</div>
+                    <div>Ketua Penguji,</div>
+                    <div class="signature-img-wrap">
+                         {% if signature_src %} 
+                            <img class="signature-img" src="{{ signature_src }}" alt="Tanda tangan">
+                        {% endif %} 
+                    </div>
+                    <div class="signature-name">Muhammad Sadno</div>
+                    <div class="nip">NIP. 11223344556677</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>

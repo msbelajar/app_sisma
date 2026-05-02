@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block menusidebar %}
+{% include "user/sidebar.html" %}
+{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<!--begin::App Content Header-->
+<div class="app-content-header">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <!--begin::Row-->
+        <div class="row">
+            <div class="col-sm-6">
+                <h4 class="mb-0">Profil</h4>
+            </div>
+        </div>
+        <!--end::Row-->
+    </div>
+    <!--end::Container-->
+</div>
+<div class="app-content">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <!--begin::Row-->
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card card-primary card-outline mb-4">
+
+                    <!--begin::Body-->
+                    <div class="card-body">
+                        <form id="ubahprofil">
+                            <div class="mb-3">
+                                <label for="nip" class="form-label">NIP</label>
+                                <input type="text" class="form-control" id="nip" value="{{dosen.nip}}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="nama" class="form-label">Nama</label>
+                                <input type="text" class="form-control" id="nama" value="{{dosen.nama_dosen}}">
+                            </div>
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-warning">Ubah Profil</button>
+                            </div>
+                        </form>
+                        <hr>
+                        <h5>Upload Tanda Tangan</h5>
+                        <form id="uploadttd" enctype="multipart/form-data">
+                            <div class="input-group mb-3">
+                                <input type="file" class="form-control" id="upload" name="file" accept=".jpg,.jpeg,.png"
+                                    required>
+                                <!-- <label class="input-group-text" for="upload">Upload Tanda Tangan</label> -->
+                            </div>
+                            <div class="form-text mb-3">
+                                *format .jpg, .jpeg, atau .png max 200kb
+                            </div>
+                            <div class="mb-3">
+                                {% if dosen.tandatangan %}
+                                    <img src="/dosen/lihatsign/{{dosen.tandatangan}}" alt="tandatangan" class="img-thumbnail" style="max-width: 300px;">
+                                {% else %}
+                                    <p class="text-muted">Belum ada tanda tangan yang diupload</p>
+                                {% endif %}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Upload Tanda Tangan</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-success card-outline mb-4">
+                    <form id="ubahpassword">
+                        <!--begin::Body-->
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="passwordlama" class="form-label">Password Lama</label>
+                                <input type="password" class="form-control" id="passwordlama" required minlength="6">
+                            </div>
+                            <div class="mb-3">
+                                <label for="passwordbaru" class="form-label">Password Baru</label>
+                                <input type="password" class="form-control" id="passwordbaru" required minlength="6">
+                                <div class="form-text mb-3">password minimal 6 karakter</div>
+                            </div>
+                        </div>
+                        <!--end::Body-->
+                        <!--begin::Footer-->
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-success">Ubah Password</button>
+                        </div>
+                        <!--end::Footer-->
+                    </form>
+                    <!--end::Form-->
+                </div>
+            </div>
+        </div>
+        <!--end::Row-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::App Content-->
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $('#uploadttd').on('submit', function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('upload');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File tidak dipilih',
+                    text: 'Pilih file tanda tangan terlebih dahulu'
+                });
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            axios.post('/dosen/uploadttd', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then(function (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Tanda tangan berhasil diupload',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        location.reload();
+                    });
+                })
+                .catch(function (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal upload tanda tangan',
+                        text: error.response?.data?.detail || 'Terjadi kesalahan'
+                    });
+                });
+        });
+
+        $('#ubahprofil').on('submit', function(e) {
+            e.preventDefault();
+            const data = {
+                nip: $('#nip').val(),
+                nama_dosen: $('#nama').val()
+            }
+            axios.put('/dosen/ubahprofil', data)
+                .then(function (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Profil berhasil diubah',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        location.reload();
+                    });
+                })
+                .catch(function (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal mengubah profil',
+                        text: error.response.data.detail || 'Terjadi kesalahan'
+                    });
+                });
+
+        })
+
+        $('#ubahpassword').on('submit', function(e) {
+            e.preventDefault();
+            const data = {
+                password_lama: $('#passwordlama').val(),
+                password_baru: $('#passwordbaru').val()
+            }
+            axios.put('/dosen/ubahpassword', data)
+                .then(function (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Password berhasil diubah',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        location.reload();
+                    });
+                })
+                .catch(function (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal mengubah password',
+                        text: error.response.data.detail || 'Terjadi kesalahan'
+                    });
+                });
+        });
+
+    }); //end document ready
+</script>
+{% endblock %}
